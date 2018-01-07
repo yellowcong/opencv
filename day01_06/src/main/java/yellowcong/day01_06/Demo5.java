@@ -7,6 +7,7 @@ import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.highgui.Highgui;
@@ -20,12 +21,12 @@ import com.yellowcong.face.FaceDemo;
  * 创建者    :yellowcong
  * 机能概要:利用Opencv 来查找轮廓图
  */
-public class Demo4 {
+public class Demo5 {
 	public static void main(String[] args) {
 		//图片地址
 		String inputImagePath = FaceDemo.class.getClassLoader().getResource("pics/autojump.png").getFile();
 		
-		String outPath = "D:/demo4.png";
+		String outPath = "D:/demo5.png";
 		
 		//加载lib,这个lib的名称
 	    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -62,7 +63,14 @@ public class Demo4 {
 	    int maxValIdx = 0;
 	    //获取轮廓信息
 	    for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++){
+	    	 
+	    	 MatOfPoint points = contours.get(contourIdx);
 	    	
+	    	 Rect rect = Imgproc.boundingRect(points);
+	    	 
+	    	 int x = rect.x;
+	    	 int y = rect.y;
+	    	 System.out.printf("(x,y)\t(%d,%d)\r\n",x,y);
 	    	 //计算最大面积的轮廓
 	    	 double contourArea = Imgproc.contourArea(contours.get(contourIdx));
 	    	 if (maxVal < contourArea){
@@ -70,11 +78,14 @@ public class Demo4 {
 		        maxValIdx = contourIdx;
 	    	 }
 	    }	
-	    
 	    Scalar color =new Scalar(255d,153d,0);
 	    //图片
 	    Imgproc.drawContours(image, contours, maxValIdx, color, 5);
 	    
+	    MatOfPoint points = contours.get(maxValIdx);
+	    Rect rect = Imgproc.boundingRect(points);
+	    System.out.printf("最大轮廓坐标(x,y)\t(%d,%d)\r\n",rect.x,rect.y);
+   	 
 	    // 写入到文件
 	    Highgui.imwrite(outPath, image);
 	    

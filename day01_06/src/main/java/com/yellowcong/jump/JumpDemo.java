@@ -87,6 +87,24 @@ public class JumpDemo {
 	    	
 	    }*/
 	    
+	    double maxVal = 0;
+	    int maxValIdx = 0;
+	    //获取轮廓信息
+	    for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++){
+	    	
+	    	 //计算最大面积的轮廓
+	    	 double contourArea = Imgproc.contourArea(contours.get(contourIdx));
+	    	 if (maxVal < contourArea){
+		        maxVal = contourArea;
+		        maxValIdx = contourIdx;
+	    	 }
+	    }	
+	    
+	    Scalar color =new Scalar(255d,153d,0);
+	    
+	    //图片
+	    Imgproc.drawContours(image, contours, maxValIdx, color, 5);
+	    
 	    
 	    // 写入到文件
 	    Highgui.imwrite(outPath, image);
